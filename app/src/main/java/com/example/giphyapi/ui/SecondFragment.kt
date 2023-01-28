@@ -1,4 +1,4 @@
-package com.example.giphyapi
+package com.example.giphyapi.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.giphyapi.R
 import com.example.giphyapi.databinding.FragmentSecondBinding
 
 /**
