@@ -16,6 +16,15 @@ interface ApiService {
 
     @GET("gifs/search?")
     fun getData(@Query("api_key") api_key: String? = null,
+                @Query("q") q: String? = null,
+                @Query("limit") limit: Int? = null,
+                @Query("offset") offset: Int? = null,
+                @Query("rating") rating: String? = null,
+                @Query("lang") lang: String? = null,
+    ): Call<ListResponseGiphy>
+
+    @GET("gifs/search?")
+    fun getDataSearch(@Query("api_key") api_key: String? = null,
                 @Query("q") q: Int? = null,
                 @Query("limit") limit: Int? = null,
                 @Query("offset") offset: Int? = null,
