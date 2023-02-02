@@ -1,42 +1,49 @@
 package com.example.giphyapi.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.giphyapi.R
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.giphyapi.databinding.ActivityDetailBinding
-import com.example.giphyapi.ui.databinding.ActivityDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.*
+import java.net.URL
+import java.net.URLConnection
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDetailBinding
 
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        var url = intent.getStringExtra(MainActivity.URL)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_detail)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        if (url?.isNotEmpty() == true) {
+            Glide.with(this).load(url).into(binding.imageView)
         }
-    }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_detail)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+        /*val dir = File(this@DetailActivity.cacheDir, "mydir")
+
+        val gpxfile = File(dir, this.url.hashCode().toString())
+        Glide.with(this).load(gpxfile).into(binding.imageView)*/
+
+
     }
 }

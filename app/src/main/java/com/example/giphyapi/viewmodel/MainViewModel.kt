@@ -1,45 +1,27 @@
 package com.example.giphyapi.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.*
-import androidx.paging.*
-
-import com.example.giphyapi.model.ResponseGiphy
-import com.example.giphyapi.network.api.ApiService
-import com.example.giphyapi.paginlib.source.GiphyPagingSource
-import com.example.giphyapi.paginlib.source.NETWORK_PAGE_SIZE
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import androidx.paging.liveData
+import com.example.giphyapi.repository.GiphyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val giphyRepository: GiphyRepository
 ) : ViewModel() {
 
     var currentQuery = MutableLiveData("")
 
-
-    private fun getGiphyPager(searchText: String): Pager<Int, ResponseGiphy> {
-        return Pager(
-            config = PagingConfig(
-                NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                GiphyPagingSource(apiService, searchText)
-            }
-        )
+    var getGiphyPagerLiveData = currentQuery.switchMap {
+        giphyRepository.getGiphyPager(it).liveData.cachedIn(viewModelScope)
     }
 
-    fun getGiphyPagerLiveData(): LiveData<PagingData<ResponseGiphy>> {
-        var defaultQuery = ""
-        if (currentQuery.value?.isNotEmpty() == true) defaultQuery = currentQuery.value.toString()
-        Log.d("defaultQuery", currentQuery.value.toString())
-        return getGiphyPager(defaultQuery).liveData.cachedIn(viewModelScope)
-
-    }
-
-    var test = currentQuery.switchMap {
-        getGiphyPager(it).liveData.cachedIn(viewModelScope)
+    fun getAllFromRoom(){
+        giphyRepository.getGiphyFromRoom()
     }
 }
