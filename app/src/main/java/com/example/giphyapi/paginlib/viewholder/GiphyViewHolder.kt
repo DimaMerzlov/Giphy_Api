@@ -30,13 +30,25 @@ class GiphyViewHolder private constructor(private val binding: ItemLayoutBinding
 
         if (item is ResponseGiphy) {
             //binding.notification = item
-            Log.d("TEGURL", item.images.original.url.toString())
-            Glide.with(binding.root.context)
-                .asGif()
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
-                .load(item.images.original.url).error(
-                R.drawable.ic_launcher_background
-            ).into(binding.ivGif)
+
+            if (item.file == null) {
+                Log.d("TEGURL", item.images?.original?.url.toString())
+                Glide.with(binding.root.context)
+                    .asGif()
+                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(item.images?.original?.url).error(
+                        R.drawable.ic_launcher_background
+                    ).into(binding.ivGif)
+
+            } else {
+                Log.d("TEGFILE", item.images?.original?.url.toString())
+                Glide.with(binding.root.context)
+                    .asGif()
+                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(item.file).error(
+                        R.drawable.ic_launcher_background
+                    ).into(binding.ivGif)
+            }
             binding.root.setOnClickListener {
                 clickListener?.invoke(item)
             }

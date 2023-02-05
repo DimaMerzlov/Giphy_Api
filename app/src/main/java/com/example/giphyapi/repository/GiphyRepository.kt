@@ -41,9 +41,11 @@ class GiphyRepository @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                GiphyPagingSource(apiService, searchText) {
+                GiphyPagingSource(apiService, searchText, saveListener = {
                     saveToCash(it)
                     saveToRoom(it)
+                }) {
+                    loadFromCash()
                 }
             }
         )
@@ -51,13 +53,17 @@ class GiphyRepository @Inject constructor(
 
     private fun saveToRoom(list: List<ResponseGiphy>) {
         for (giphy in list) {
-            var url = giphy.images.original.url
-            dao.addGiphy(
+            var url = giphy.images?.original?.url
+            url?.let {
                 GiphyEntity(
                     url.hashCode().toString(),
-                    url
+                    it
                 )
-            )
+            }?.let {
+                dao.addGiphy(
+                    it
+                )
+            }
         }
     }
 
@@ -65,7 +71,7 @@ class GiphyRepository @Inject constructor(
 
         try {
             for (singleUrl in list) {
-            Glide.with(context).asFile().load(singleUrl.images.original.url).apply(
+                Glide.with(context).asFile().load(singleUrl.images?.original?.url).apply(
                     RequestOptions()
                         .format(DecodeFormat.PREFER_ARGB_8888)
                 )
@@ -74,7 +80,7 @@ class GiphyRepository @Inject constructor(
                             resource: File,
                             transition: Transition<in File>?
                         ) {
-                            storeImage(resource, singleUrl.images.original.url);
+                            singleUrl.images?.original?.let { storeImage(resource, it.url) };
                             Log.d("Glide in work", "its worked")
                         }
 
@@ -119,6 +125,17 @@ class GiphyRepository @Inject constructor(
 
     fun getGiphyFromRoom() {
         Log.d("TEGROOM", dao.getAll().toString())
+    }
+
+    fun loadFromCash(): List<ResponseGiphy> {
+        var listResponseGiphy = mutableListOf<ResponseGiphy>()
+        for (giphyEntity in dao.getAll()) {
+            val dir = File(context.cacheDir, "mydir")
+
+            val gpxfile = File(dir, giphyEntity.hashCode)
+            listResponseGiphy.add(ResponseGiphy(file = gpxfile))
+        }
+        return listResponseGiphy
     }
 
 }

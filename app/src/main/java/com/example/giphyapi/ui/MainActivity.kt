@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         var giphyAdapter = GiphyPagingAdapter().apply {
             clickListener = {
                 var intent = Intent(this@MainActivity, DetailActivity::class.java)
-                intent.putExtra(URL, it.images.original.url)
+                intent.putExtra(URL, it.images?.original?.url)
                 startActivity(intent)
             }
         }
