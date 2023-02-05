@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        viewModel.deleteAll()
 
         callNetworkConnection()
 

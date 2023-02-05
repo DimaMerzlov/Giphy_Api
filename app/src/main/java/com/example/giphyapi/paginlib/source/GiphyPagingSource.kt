@@ -5,12 +5,9 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.giphyapi.model.ResponseGiphy
 import com.example.giphyapi.network.api.ApiService
-import com.example.giphyapi.room.GiphyEntity
-import com.example.giphyapi.room.dao.GiphyDao
-import retrofit2.awaitResponse
 
 private const val INITIAL_LOAD_SIZE = 1
-const val NETWORK_PAGE_SIZE = 50
+const val NETWORK_PAGE_SIZE = 2
 
 
 class GiphyPagingSource(

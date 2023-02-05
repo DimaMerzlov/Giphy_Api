@@ -2,29 +2,19 @@ package com.example.giphyapi.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.giphyapi.databinding.ActivityDetailBinding
+import com.example.giphyapi.viewmodel.DetailViewMode
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.*
-import java.net.URL
-import java.net.URLConnection
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
+    private val viewModel by viewModels<DetailViewMode>()
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +27,12 @@ class DetailActivity : AppCompatActivity() {
 
         if (url?.isNotEmpty() == true) {
             Glide.with(this).load(url).into(binding.imageView)
+        }
+
+        binding.ivDelete.setOnClickListener {
+            url.let {
+                it
+            }?.let { it1 -> viewModel.deleteUrlFromCash(it1) }
         }
 
         /*val dir = File(this@DetailActivity.cacheDir, "mydir")
