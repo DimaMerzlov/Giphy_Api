@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        viewModel.deleteAll()
-
         callNetworkConnection()
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

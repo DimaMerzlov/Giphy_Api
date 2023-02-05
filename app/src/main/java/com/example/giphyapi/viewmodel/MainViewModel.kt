@@ -25,7 +25,5 @@ class MainViewModel @Inject constructor(
         giphyRepository.getGiphyFromRoom()
     }
 
-    fun deleteAll(){
-        giphyRepository.deleteAll()
-    }
+
 }
